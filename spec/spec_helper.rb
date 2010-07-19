@@ -9,7 +9,7 @@ require 'rack_dav'
 require 'tempfile'
 require 'fileutils'
 
-DOC_ROOT = File.join(Dir.tmpdir, 'dryk_11112')
+DOC_ROOT = File.join(Dir.tmpdir, 'dryk_9494')
 Spec::Runner.configure do |config|
   config.before(:each) do
     FileUtils.mkdir(DOC_ROOT) unless File.exists?(DOC_ROOT)
@@ -21,7 +21,7 @@ Spec::Runner.configure do |config|
       run RackDAV::Handler.new(:root => DOC_ROOT)
     end.to_app
 
-    Rack::Handler::WEBrick.run(app, :Host => '0.0.0.0', :Port => 3003)
+    Rack::Handler::WEBrick.run(app, :Host => '0.0.0.0', :Port => 9494)
   end
 
   config.after(:each) do
