@@ -9,13 +9,40 @@ describe "Dryk" do
   end
 end
 describe "create collections" do
-  let(:mock_request) { Rack::MockRequest.new(@@rack_dav) }
+  let(:request) { Rack::MockRequest.new(@@rack_dav) }
   let(:dorayaki) { Dryk.new }
+  let(:server_address) { 'https://127.0.0.1:9494' }
   it "input directories" do
     dorayaki.directories = get_directories
     dorayaki.directories.should == get_directories
   end
+  it "sort by creatable order" do
+    dorayaki.directories = get_directories
+    dorayaki.sort!
+    dorayaki.directories.should == ['/foo/', '/abc/', '/foo/bar/']
+  end
+  it "no collections" do
+    dorayaki.handler = request
+    dorayaki.server = server_address
+    dorayaki.webdav_directory('/foo/').should == 404
+    dorayaki.webdav_directory('/abc/').should == 404
+    dorayaki.webdav_directory('/foo/bar/').should == 404
+  end
+  it "make collections" do
+    dorayaki.directories = get_directories
+    dorayaki.sort!
+    dorayaki.handler = request
+    dorayaki.server = server_address
+    dorayaki.make_collections
+    dorayaki.webdav_directory('/foo/').should == 200
+    dorayaki.webdav_directory('/abc/').should == 200
+    dorayaki.webdav_directory('/foo/bar/').should == 200
+  end
 end
 def get_directories
-  Dir.glob('spec/fixtures/**/')
+  [
+    '/foo/bar/',
+    '/abc/',
+    '/foo/',
+  ]
 end
