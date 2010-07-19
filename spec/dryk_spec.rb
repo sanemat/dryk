@@ -1,7 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Dryk" do
-  it "fails" do
-    fail "hey buddy, you should probably rename this file and start specing for real"
+  before(:all) do
+    @mock_request  = Rack::MockRequest.new(@@rack_dav)
+  end
+  it "create instance" do
+    lambda {
+      @dryk = Dryk.new
+    }.should_not raise_error
   end
 end

@@ -1,0 +1,2 @@
+class Dryk
+end

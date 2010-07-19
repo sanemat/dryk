@@ -14,9 +14,9 @@ USER_NAME = 'user'
 PASSWORD = 'pass'
 
 Spec::Runner.configure do |config|
-  config.before(:each) do
+  config.before(:all) do
     FileUtils.mkdir(DOC_ROOT) unless File.exists?(DOC_ROOT)
-    app = Rack::Builder.new do
+    @@rack_dav = Rack::Builder.new do
       use Rack::ShowExceptions
       use Rack::CommonLogger
       use Rack::Reloader
@@ -27,11 +27,9 @@ Spec::Runner.configure do |config|
       end
       run RackDAV::Handler.new(:root => DOC_ROOT)
     end.to_app
-
-    Rack::Handler::WEBrick.run(app, :Host => '127.0.0.1', :Port => 9494)
   end
 
-  config.after(:each) do
+  config.after(:all) do
     FileUtils.rm_rf(DOC_ROOT) if File.exists?(DOC_ROOT)
   end
 end
