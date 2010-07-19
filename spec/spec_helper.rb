@@ -28,7 +28,7 @@ Spec::Runner.configure do |config|
       run RackDAV::Handler.new(:root => DOC_ROOT)
     end.to_app
 
-    Rack::Handler::WEBrick.run(app, :Host => 'localhost', :Port => 9494)
+    Rack::Handler::WEBrick.run(app, :Host => '127.0.0.1', :Port => 9494)
   end
 
   config.after(:each) do
