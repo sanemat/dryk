@@ -12,14 +12,9 @@ describe "create collections" do
   let(:request) { Rack::MockRequest.new(@@rack_dav) }
   let(:dorayaki) { Dryk.new }
   let(:server_address) { 'https://127.0.0.1:9494' }
-  it "input directories" do
-    dorayaki.directories = get_directories
-    dorayaki.directories.should == get_directories
-  end
   it "sort by creatable order" do
-    dorayaki.directories = get_directories
-    dorayaki.sort!
-    dorayaki.directories.should == ['/foo/', '/abc/', '/foo/bar/']
+    directories = CreatableOrderArray.new(get_directories).sort
+    directories.should == ['/foo/', '/abc/', '/foo/bar/']
   end
   it "no collections" do
     dorayaki.handler = request
@@ -29,11 +24,10 @@ describe "create collections" do
     dorayaki.webdav_directory('/foo/bar/').should == 404
   end
   it "make collections" do
-    dorayaki.directories = get_directories
-    dorayaki.sort!
     dorayaki.handler = request
     dorayaki.server = server_address
-    dorayaki.make_collections
+    directories = CreatableOrderArray.new(get_directories).sort
+    dorayaki.make_collections directories
     dorayaki.webdav_directory('/foo/').should == 200
     dorayaki.webdav_directory('/abc/').should == 200
     dorayaki.webdav_directory('/foo/bar/').should == 200
