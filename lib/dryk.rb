@@ -12,10 +12,10 @@ class Dryk
     ).status
   end
   def make_collections
-    def @handler.mkcol(uri, opts={})    self.request("MKCOL", uri, opts)    end
     @directories.each do |directory|
       if webdav_directory(directory) == 404
-        @handler.mkcol(
+        @handler.request(
+          'MKCOL',
           @server + directory,
           'HTTP_AUTHORIZATION' => 'Basic ' + ["user:pass"].pack("m*")
         )
